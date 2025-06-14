@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import org.chess.engine.Alliance;
 import org.chess.engine.pieces.*;
 import org.chess.engine.player.BlackPlayer;
+import org.chess.engine.player.Player;
 import org.chess.engine.player.WhitePlayer;
 
 import java.util.*;
@@ -41,6 +42,14 @@ public class Board {
             }
         }
         return builder.toString();
+    }
+
+    public Player whitePlayer(){
+        return this.whitePlayer;
+    }
+
+    public Player blackPlayer(){
+        return this.blackPlayer;
     }
 
     private Collection<Move> calculateLegalMoves(final Collection<Piece> pieces) {
