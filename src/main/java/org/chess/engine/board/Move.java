@@ -14,17 +14,35 @@ public abstract class Move {
         this.destinationCoordinate = _destinationCoordinate;
     }
 
+    public int getDestinationCoordinate() {
+        return this.destinationCoordinate;
+    }
+
+    public abstract Board execute();
+
     public static final class MajorMove extends Move {
         public MajorMove(final Board _board, final Piece _movedPiece, final int _destinationCoordinate) {
             super(_board, _movedPiece, _destinationCoordinate);
         }
+
+        @Override
+        public Board execute() {
+            return null;
+        }
     }
+
 
     public static final class AttackMove extends Move {
         final Piece attackedPiece;
+
         public AttackMove(final Board _board, final Piece _movedPiece, final int _destinationCoordinate, final Piece _attackedPiece) {
             super(_board, _movedPiece, _destinationCoordinate);
             this.attackedPiece = _attackedPiece;
+        }
+
+        @Override
+        public Board execute() {
+            return null;
         }
     }
 }
