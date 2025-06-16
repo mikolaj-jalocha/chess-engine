@@ -27,10 +27,26 @@ public abstract class Move {
 
         @Override
         public Board execute() {
-            return null;
+
+            final Board.Builder builder = new Board.Builder();
+
+            this.board.getCurrentPlayer().getActivePieces().stream()
+                    .filter(piece -> !movedPiece.equals(piece))
+                    .forEach(builder::setPiece);
+
+            this.board.getCurrentPlayer().getOpponent().getActivePieces().forEach(builder::setPiece);
+
+            // move the moved piece
+            builder.setPiece(this.movedPiece.movePiece(this));
+            builder.setMoveMaker(this.board.getCurrentPlayer().getOpponent().getAlliance());
+
+            return builder.build();
         }
     }
 
+    public Piece getMovedPiece() {
+        return this.movedPiece;
+    }
 
     public static final class AttackMove extends Move {
         final Piece attackedPiece;
