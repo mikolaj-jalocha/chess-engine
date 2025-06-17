@@ -2,6 +2,7 @@ package org.chess.engine.board;
 
 import org.chess.engine.pieces.Pawn;
 import org.chess.engine.pieces.Piece;
+import org.chess.engine.pieces.Rook;
 
 import java.util.Objects;
 
@@ -166,8 +167,8 @@ public abstract class Move {
 
             this.board.getCurrentPlayer().getActivePieces().stream()
                     .filter(
-                    piece -> !this.movedPiece.equals(piece)
-            ).forEach(builder::setPiece);
+                            piece -> !this.movedPiece.equals(piece)
+                    ).forEach(builder::setPiece);
             this.board.getCurrentPlayer().getOpponent().getActivePieces().forEach(builder::setPiece);
 
             final Pawn movePawn = (Pawn) this.movedPiece.movePiece(this);
@@ -179,21 +180,72 @@ public abstract class Move {
     }
 
     public static abstract class CastleMove extends Move {
-        public CastleMove(final Board _board, final Piece _movedPiece, final int _destinationCoordinate) {
+
+        public Rook getCastleRook() {
+            return castleRook;
+        }
+        
+        @Override
+        public boolean isCastlingMove() {
+            return true;
+        }
+
+        @Override
+        public Board execute() {
+            final Board.Builder builder = new Board.Builder();
+            this.board.getCurrentPlayer().getActivePieces().stream()
+                    .filter(
+                            piece -> !this.movedPiece.equals(piece) && !this.castleRook.equals(piece)
+                    ).forEach(builder::setPiece);
+            this.board.getCurrentPlayer().getOpponent().getActivePieces().forEach(builder::setPiece);
+
+            //move king
+            builder.setPiece(this.movedPiece.movePiece(this));
+            //move castle
+            builder.setPiece(new Rook(this.castleRook.getPieceAlliance(), this.castleRookDestination));
+            builder.setMoveMaker(this.board.getCurrentPlayer().getOpponent().getAlliance());
+            return builder.build();
+        }
+
+        protected final Rook castleRook;
+        protected final int castleRookStart;
+        protected final int castleRookDestination;
+
+        public CastleMove(final Board _board, final Piece _movedPiece, final int _destinationCoordinate,
+                          final Rook castleRook,
+                          final int castleRookStart,
+                          final int castleRookDestination
+        ) {
             super(_board, _movedPiece, _destinationCoordinate);
+            this.castleRook = castleRook;
+            this.castleRookStart = castleRookStart;
+            this.castleRookDestination = castleRookDestination;
         }
     }
 
     public static final class KingSideCastleMove extends CastleMove {
-        public KingSideCastleMove(final Board _board, final Piece _movedPiece, final int _destinationCoordinate) {
-            super(_board, _movedPiece, _destinationCoordinate);
+        public KingSideCastleMove(final Board _board, final Piece _movedPiece, final int _destinationCoordinate, final Rook castleRook,
+                                  final int castleRookStart,
+                                  final int castleRookDestination) {
+            super(_board, _movedPiece, _destinationCoordinate, castleRook, castleRookStart, castleRookDestination);
+        }
 
+        @Override
+        public String toString() {
+            return "O-O";
         }
     }
 
     public static final class QueenSideCastleMove extends CastleMove {
-        public QueenSideCastleMove(final Board _board, final Piece _movedPiece, final int _destinationCoordinate) {
-            super(_board, _movedPiece, _destinationCoordinate);
+        public QueenSideCastleMove(final Board _board, final Piece _movedPiece, final int _destinationCoordinate, final Rook castleRook,
+                                   final int castleRookStart,
+                                   final int castleRookDestination) {
+            super(_board, _movedPiece, _destinationCoordinate, castleRook, castleRookStart, castleRookDestination);
+        }
+
+        @Override
+        public String toString() {
+            return "O-O-O";
         }
     }
 
