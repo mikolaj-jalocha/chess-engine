@@ -252,7 +252,6 @@ public class Table {
         }
 
         private void highlightLegals(final Board board) {
-            if (true) {
                 pieceLegalMoves(board).stream()
                         .filter(move -> move.getDestinationCoordinate() == this.tileId)
                         .forEach(move -> {
@@ -262,7 +261,6 @@ public class Table {
                                 e.printStackTrace();
                             }
                         });
-            }
         }
 
         private Collection<Move> pieceLegalMoves(final Board board) {

@@ -20,10 +20,20 @@ public class Bishop extends Piece {
         return new Bishop(move.getMovedPiece().getPieceAlliance(), move.getDestinationCoordinate());
     }
 
-    public Bishop(Alliance pieceAlliance, int piecePosition) {
+    public Bishop(final Alliance pieceAlliance, final int piecePosition) {
         super(
                 PieceType.BISHOP,
-                piecePosition, pieceAlliance);
+                piecePosition,
+                pieceAlliance,
+                true);
+    }
+
+    public Bishop(final Alliance pieceAlliance, final int piecePosition, final boolean isFirstMove) {
+        super(
+                PieceType.BISHOP,
+                piecePosition,
+                pieceAlliance,
+                isFirstMove);
     }
 
     @Override
