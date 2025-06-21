@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class Pawn extends Piece {
 
     private final static int[] CANDIDATE_MOVE_COORDINATE = {7, 8, 9, 16};

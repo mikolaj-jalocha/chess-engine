@@ -1,7 +1,6 @@
 package org.chess.engine.board;
 
-import java.util.Map;
-
+@SuppressWarnings("ALL")
 public class BoardUtils {
 
     public static final boolean[] FIRST_COLUMN = initColumn(0);

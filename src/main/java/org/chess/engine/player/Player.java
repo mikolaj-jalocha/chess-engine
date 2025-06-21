@@ -10,6 +10,7 @@ import org.chess.engine.pieces.Piece;
 
 import java.util.Collection;
 
+@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public abstract class Player {
 
     protected final Board board;

@@ -6,13 +6,13 @@ import org.chess.engine.board.Move;
 
 import java.util.Collection;
 
+@SuppressWarnings("unused")
 public abstract class Piece {
 
     protected final PieceType pieceType;
     protected final int piecePosition;
     protected final Alliance pieceAlliance;
     protected final boolean isFirstMove;
-    private final int cachcedHashcode;
 
     Piece(
             final PieceType pieceType,
@@ -23,7 +23,7 @@ public abstract class Piece {
         this.piecePosition = piecePosition;
         this.pieceAlliance = pieceAlliance;
         this.isFirstMove = isFirstMove;
-        this.cachcedHashcode = computeHashCode();
+        int cachcedHashcode = computeHashCode();
     }
 
     private int computeHashCode() {

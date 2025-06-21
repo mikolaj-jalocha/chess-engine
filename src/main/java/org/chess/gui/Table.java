@@ -13,8 +13,6 @@ import org.chess.engine.player.ai.MoveStrategy;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -28,8 +26,8 @@ import static javax.swing.SwingUtilities.isLeftMouseButton;
 import static javax.swing.SwingUtilities.isRightMouseButton;
 
 
+@SuppressWarnings("ALL")
 public class Table extends Observable {
-    private final JFrame gameFrame;
     private final BoardPanel boardPanel;
     private final GameSetup gameSetup;
 
@@ -39,8 +37,6 @@ public class Table extends Observable {
     private Tile destinationTile;
     private Piece humanMovedPiece;
     private BoardDirection boardDirection;
-
-    private Move computerMove;
 
 
     private final Color lightTileColor = Color.decode("#FFFACD");
@@ -55,18 +51,18 @@ public class Table extends Observable {
     private static final Table INSTANCE = new Table();
 
     private Table() {
-        this.gameFrame = new JFrame("Szachy");
-        this.gameFrame.setLayout(new BorderLayout());
+        JFrame gameFrame = new JFrame("Szachy");
+        gameFrame.setLayout(new BorderLayout());
         final JMenuBar tableMenuBar = createTableMenuBar();
-        this.gameFrame.setJMenuBar(tableMenuBar);
-        this.gameFrame.setSize(OUTER_FRAME_DIMENSION);
+        gameFrame.setJMenuBar(tableMenuBar);
+        gameFrame.setSize(OUTER_FRAME_DIMENSION);
         this.chessBoard = Board.createStandardBoard();
         boardPanel = new BoardPanel();
         this.addObserver(new TableGameAIWatcher());
-        this.gameSetup = new GameSetup(this.gameFrame, true);
+        this.gameSetup = new GameSetup(gameFrame, true);
         this.boardDirection = BoardDirection.NORMAL;
-        this.gameFrame.add(this.boardPanel, BorderLayout.CENTER);
-        this.gameFrame.setVisible(true);
+        gameFrame.add(this.boardPanel, BorderLayout.CENTER);
+        gameFrame.setVisible(true);
     }
 
     public static Table get() {
@@ -83,45 +79,17 @@ public class Table extends Observable {
 
     private JMenuBar createTableMenuBar() {
         final JMenuBar tableMenuBar = new JMenuBar();
-        tableMenuBar.add(createFileMenu());
         tableMenuBar.add(createPreferencesMenu());
         tableMenuBar.add(createOptionsMenu());
         return tableMenuBar;
     }
 
-    private JMenu createFileMenu() {
-        final JMenu fileMenu = new JMenu("File");
-
-        final JMenuItem openPGN = new JMenuItem("Load PGN file");
-        openPGN.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("clicked");
-            }
-        });
-        fileMenu.add(openPGN);
-
-        final JMenuItem exitMenuItem = new JMenuItem("Exit");
-        exitMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
-
-        fileMenu.add(exitMenuItem);
-        return fileMenu;
-    }
-
     private JMenu createPreferencesMenu() {
-        final JMenu preferencesMenu = new JMenu("Preferences");
-        final JMenuItem flipBoardMenuItem = new JMenuItem("Flip Board");
-        flipBoardMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                boardDirection = boardDirection.opposite();
-                boardPanel.drawBoard(chessBoard);
-            }
+        final JMenu preferencesMenu = new JMenu("Preferencje");
+        final JMenuItem flipBoardMenuItem = new JMenuItem("Obróć planszę");
+        flipBoardMenuItem.addActionListener(e -> {
+            boardDirection = boardDirection.opposite();
+            boardPanel.drawBoard(chessBoard);
         });
         preferencesMenu.add(flipBoardMenuItem);
         return preferencesMenu;
@@ -129,15 +97,12 @@ public class Table extends Observable {
 
     private JMenu createOptionsMenu() {
 
-        final JMenu optionsMenu = new JMenu("Options");
+        final JMenu optionsMenu = new JMenu("Opcje");
 
-        final JMenuItem setupGameMenuItem = new JMenuItem("Setup Game");
-        setupGameMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Table.get().getGameSetup().promptUser();
-                Table.get().setupUpdate(Table.get().getGameSetup());
-            }
+        final JMenuItem setupGameMenuItem = new JMenuItem("Ustaw grę");
+        setupGameMenuItem.addActionListener(e -> {
+            Table.get().getGameSetup().promptUser();
+            Table.get().setupUpdate(Table.get().getGameSetup());
         });
 
         optionsMenu.add(setupGameMenuItem);
@@ -150,6 +115,7 @@ public class Table extends Observable {
         notifyObservers(gameSetup);
     }
 
+    @SuppressWarnings("deprecation")
     private static class TableGameAIWatcher implements Observer {
         @Override
         public void update(final Observable o, final Object arg) {
@@ -176,9 +142,7 @@ public class Table extends Observable {
         this.chessBoard = board;
     }
 
-    public void updateComputerMove(final Move move) {
-        this.computerMove = move;
-    }
+    public void updateComputerMove(final Move move) {}
 
     private BoardPanel getBoardPanel() {
         return this.boardPanel;
@@ -189,32 +153,29 @@ public class Table extends Observable {
         notifyObservers(playerType);
     }
 
+    @SuppressWarnings({"CallToPrintStackTrace", "RedundantThrows"})
     private static class AIThinkTank extends SwingWorker<Move, String> {
         private AIThinkTank() {}
 
         @Override
         protected Move doInBackground() throws Exception {
 
-            final MoveStrategy miniMax = new MiniMax(4);
+            int maxDepth = 4;
+            final MoveStrategy miniMax = new MiniMax(maxDepth);
 
-            final Move bestMove = miniMax.execute(Table.get().getGameBoard());
-
-            return bestMove;
+            return miniMax.execute(Table.get().getGameBoard());
         }
 
         @Override
         protected void done() {
             try {
                 final Move bestMove = get();
-
                 Table.get().updateComputerMove(bestMove);
                 Table.get().updateGameBoard(Table.get().getGameBoard().getCurrentPlayer().makeMove(bestMove).getTransitionBoard());
                 Table.get().getBoardPanel().drawBoard(Table.get().getGameBoard());
                 Table.get().moveMadeUpdate(PlayerType.COMPUTER);
 
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
+            } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
         }
@@ -285,6 +246,7 @@ public class Table extends Observable {
         COMPUTER
     }
 
+    @SuppressWarnings({"CallToPrintStackTrace", "StringOperationCanBeSimplified"})
     private class TilePanel extends JPanel {
 
         private final int tileId;
@@ -323,15 +285,12 @@ public class Table extends Observable {
                             destinationTile = null;
                             humanMovedPiece = null;
                         }
-                        SwingUtilities.invokeLater(new Runnable() {
-                            @Override
-                            public void run() {
+                        SwingUtilities.invokeLater(() -> {
 
-                                if (gameSetup.isAIPlayer(chessBoard.getCurrentPlayer())){
-                                    Table.get().moveMadeUpdate(PlayerType.HUMAN);
-                                }
-                                boardPanel.drawBoard(chessBoard);
+                            if (gameSetup.isAIPlayer(chessBoard.getCurrentPlayer())){
+                                Table.get().moveMadeUpdate(PlayerType.HUMAN);
                             }
+                            boardPanel.drawBoard(chessBoard);
                         });
                     }
                 }

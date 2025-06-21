@@ -4,6 +4,7 @@ import org.chess.engine.board.Board;
 import org.chess.engine.pieces.Piece;
 import org.chess.engine.player.Player;
 
+@SuppressWarnings("unused")
 public final class StandardBoardEvaluator implements BoardEvaluator {
 
     private static final int CHECK_BONUS = 50;

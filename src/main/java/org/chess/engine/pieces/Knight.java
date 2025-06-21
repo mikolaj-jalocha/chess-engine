@@ -13,6 +13,7 @@ import java.util.List;
 
 import static org.chess.engine.board.BoardUtils.isValidTileCoordinate;
 
+@SuppressWarnings("unused")
 public class Knight extends Piece {
 
     private final static int[] CANDIDATE_MOVE_COORDINATES = {-17, -15, -10, -6, 6, 10, 15, 17};

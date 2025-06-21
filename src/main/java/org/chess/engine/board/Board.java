@@ -162,6 +162,7 @@ public class Board {
             return this;
         }
 
+        @SuppressWarnings("UnusedReturnValue")
         public Builder setMoveMaker(final Alliance nextMoveMaker) {
             this.nextMoveMaker = nextMoveMaker;
             return this;

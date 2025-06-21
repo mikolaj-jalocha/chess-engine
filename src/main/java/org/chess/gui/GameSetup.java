@@ -6,17 +6,14 @@ import org.chess.gui.Table.PlayerType;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 class GameSetup extends JDialog {
 
     private PlayerType whitePlayerType;
     private PlayerType blackPlayerType;
-    private JSpinner searchDepthSpinner;
 
-    private static final String HUMAN_TEXT = "Human";
-    private static final String COMPUTER_TEXT = "Computer";
+    private static final String HUMAN_TEXT = "Człowiek";
+    private static final String COMPUTER_TEXT = "Komputer";
 
     GameSetup(final JFrame frame,
               final boolean modal) {
@@ -45,26 +42,18 @@ class GameSetup extends JDialog {
         myPanel.add(blackHumanButton);
         myPanel.add(blackComputerButton);
 
-        myPanel.add(new JLabel("Search"));
-        this.searchDepthSpinner = addLabeledSpinner(myPanel, "Search Depth", new SpinnerNumberModel(6, 0, Integer.MAX_VALUE, 1));
-
         final JButton cancelButton = new JButton("Cancel");
         final JButton okButton = new JButton("OK");
 
-        okButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                whitePlayerType = whiteComputerButton.isSelected() ? PlayerType.COMPUTER : PlayerType.HUMAN;
-                blackPlayerType = blackComputerButton.isSelected() ? PlayerType.COMPUTER : PlayerType.HUMAN;
-                System.out.println((int) searchDepthSpinner.getValue());
-                GameSetup.this.setVisible(false);
-            }
+        okButton.addActionListener(e -> {
+            whitePlayerType = whiteComputerButton.isSelected() ? PlayerType.COMPUTER : PlayerType.HUMAN;
+            blackPlayerType = blackComputerButton.isSelected() ? PlayerType.COMPUTER : PlayerType.HUMAN;
+            GameSetup.this.setVisible(false);
         });
 
-        cancelButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Cancel");
-                GameSetup.this.setVisible(false);
-            }
+        cancelButton.addActionListener(e -> {
+            System.out.println("Cancel");
+            GameSetup.this.setVisible(false);
         });
 
         myPanel.add(cancelButton);
@@ -93,20 +82,5 @@ class GameSetup extends JDialog {
 
     PlayerType getBlackPlayerType() {
         return this.blackPlayerType;
-    }
-
-    private static JSpinner addLabeledSpinner(final Container c,
-                                              final String label,
-                                              final SpinnerModel model) {
-        final JLabel l = new JLabel(label);
-        c.add(l);
-        final JSpinner spinner = new JSpinner(model);
-        l.setLabelFor(spinner);
-        c.add(spinner);
-        return spinner;
-    }
-
-    int getSearchDepth() {
-        return (Integer)this.searchDepthSpinner.getValue();
     }
 }

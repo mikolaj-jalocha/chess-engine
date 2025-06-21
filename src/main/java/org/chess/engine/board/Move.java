@@ -4,6 +4,7 @@ import org.chess.engine.pieces.Pawn;
 import org.chess.engine.pieces.Piece;
 import org.chess.engine.pieces.Rook;
 
+@SuppressWarnings({"StaticInitializerReferencesSubClass", "unused"})
 public abstract class Move {
 
     protected final Board board;
