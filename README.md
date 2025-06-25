@@ -1,12 +1,18 @@
+
 ## Chess Engine
 
-This project implements basic chess engine that uses MiniMax algorithm for it's AI player.
-In source code some of the most common design patterns such as singleton, builder, decorator or factory are used. Most of the classes are immutable and follow OOP principles. In files you can find some of the most useful Java 8 features such as Lambda expressions, Streams API or Optional class. 
+This project implements a basic chess engine that uses the **MiniMax** algorithm for its AI player.
 
-### Libraries & tools
+In the source code, several common **design patterns** such as **Singleton**, **Builder**, **Decorator**, and **Factory** are applied. Most classes are **immutable** and follow **OOP principles**. The project also takes advantage of useful Java 8 features like **Lambda expressions**, **Streams API**, and the **Optional** class.
 
- - [guava](https://github.com/google/guava)  - for immutable collections
- - Java Swing - for basic UI
- - Maven as a build tool
+### Libraries & Tools
 
-![Zrzut ekranu 2025-06-21 o 14 43 06](https://github.com/user-attachments/assets/58e18c87-8265-4bd2-aa21-6aa494f51f26)
+- [Guava](https://github.com/google/guava) – for immutable collections  
+- **Java Swing** – for basic UI  
+- **Maven** – as a build tool  
+
+### Screenshots
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/a77e4d07-bc58-4a87-a353-90169093279c"  />
+</p>
